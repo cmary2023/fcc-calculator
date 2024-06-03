@@ -4,8 +4,7 @@ A Pen created on CodePen.io. Original URL: [https://codepen.io/cmary2023/pen/abr
 
 I designed and coded this "Javascript Calculator" project as part of the Front End Dev Certificate at #freeCodeCamp. 
 ## Project Preview
-![image](https://github.com/cmary2023/personal-portofolio/blob/main/preview
-.png)
+![image](https://github.com/cmary2023/fcc-calculator/blob/main/preview.png)
 
 
 
