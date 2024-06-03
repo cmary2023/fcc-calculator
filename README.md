@@ -6,4 +6,7 @@ I designed and coded this "Javascript Calculator" project as part of the Front E
 ## Project Preview
 ![image](https://github.com/cmary2023/personal-portofolio/blob/main/Maria%20Corban%20(27.05.2024%2019_02).png)
 
-[Uploading 03.06.2024 20_04.webm…]()
+
+
+Uploading 03.06.2024 20_04.mp4…
+
