@@ -1,0 +1,352 @@
+const isOperator = /[*/+-]/;
+const hasDecimal = /[.]/;
+const endsWithOperator = /[*/+-]$/;
+
+class Buttons extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="buttons-wrapper">
+        <button
+          id="clear"
+          className="buttons"
+          value="AC"
+          onClick={this.props.clearVal}
+        >
+          AC
+        </button>
+        <button
+          id="divide"
+          className="buttons"
+          value="/"
+          onClick={() => this.props.performOp("/")}
+        >
+          /
+        </button>
+        <button
+          id="multiply"
+          className="buttons"
+          value="x"
+          onClick={() => this.props.performOp("*")}
+        >
+          x
+        </button>
+        <button
+          id="seven"
+          className="buttons nbr"
+          value="7"
+          onClick={this.props.typeNumbers}
+        >
+          7
+        </button>
+        <button
+          id="eight"
+          className="buttons nbr"
+          value="8"
+          onClick={this.props.typeNumbers}
+        >
+          8
+        </button>
+        <button
+          id="nine"
+          className="buttons nbr"
+          value="9"
+          onClick={this.props.typeNumbers}
+        >
+          9
+        </button>
+        <button
+          id="subtract"
+          className="buttons"
+          value="-"
+          onClick={() => this.props.performOp("-")}
+        >
+          -
+        </button>
+        <button
+          id="four"
+          className="buttons nbr"
+          value="4"
+          onClick={this.props.typeNumbers}
+        >
+          4
+        </button>
+        <button
+          id="five"
+          className="buttons nbr"
+          value="5"
+          onClick={this.props.typeNumbers}
+        >
+          5
+        </button>
+        <button
+          id="six"
+          className="buttons nbr"
+          value="6"
+          onClick={this.props.typeNumbers}
+        >
+          6
+        </button>
+        <button
+          id="add"
+          className="buttons"
+          value="+"
+          onClick={() => this.props.performOp("+")}
+        >
+          +
+        </button>
+        <button
+          id="one"
+          className="buttons nbr"
+          value="1"
+          onClick={this.props.typeNumbers}
+        >
+          1
+        </button>
+        <button
+          id="two"
+          className="buttons nbr"
+          value="2"
+          onClick={this.props.typeNumbers}
+        >
+          2
+        </button>
+        <button
+          id="three"
+          className="buttons nbr"
+          value="3"
+          onClick={this.props.typeNumbers}
+        >
+          3
+        </button>
+        <button
+          id="zero"
+          className="buttons nbr"
+          value="0"
+          onClick={this.props.typeNumbers}
+        >
+          0
+        </button>
+        <button
+          id="decimal"
+          className="buttons"
+          value="."
+          onClick={this.props.handleDot}
+        >
+          .
+        </button>
+        <button
+          id="equals"
+          className="buttons"
+          value="="
+          onClick={this.props.handleEquals}
+        >
+          =
+        </button>
+      </div>
+    );
+  }
+}
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      curVal: 0,
+      formula: "",
+      evaluated: false,
+      lastResult: ""
+    };
+  }
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+  }
+  clearVal = () => {
+    this.setState({
+      curVal: 0,
+      formula: "",
+      lastResult: "",
+      evaluated: false
+    });
+  };
+
+  typeNumbers = (e, val) => {
+    // debugger;
+    // this.setState({ evaluated: false });
+    if (this.state.evaluated === true) {
+      this.setState({
+        curVal: val || e.target.value,
+        formula: val || e.target.value,
+        evaluated: false
+      });
+      
+    } else if (
+      (val || e.target.value) == 0 &&
+      this.state.curVal == 0 &&
+      this.state.formula == ""
+    ) {
+      this.setState({
+        formula: 0
+      });
+      
+    } else if (
+      //if initial val was 0 but i want another digit to start my formula before clicking operator
+      this.state.curVal == 0 &&
+      this.state.formula == 0
+    ) {
+      this.setState({
+        curVal: /(0[.0-9].*)$/.test(this.state.curVal)
+          ? this.state.curVal + (val || e.target.value)
+          : val || e.target.value,
+        formula: /(0[.0-9].*)$/.test(this.state.curVal)
+          ? this.state.curVal + (val || e.target.value)
+          : val || e.target.value
+      });
+      
+    } else {
+      this.setState({
+        curVal:
+          this.state.curVal == "0" || isOperator.test(this.state.curVal)
+            ? val || e.target.value
+            : this.state.curVal + (val || e.target.value),
+        formula:
+          this.state.curVal == "0" && (val || e.target.value) == "0"
+            ? this.state.formula
+            : /([^.0-9]0)$/.test(this.state.formula)
+            ? this.state.formula.slice(0, -1) + (val || e.target.value)
+            : this.state.formula + (val || e.target.value)
+      });
+    }
+    
+  };
+
+  handleKeyDown = e => {
+    let { key } = e;
+
+    if (/\d/.test(key)) {
+      e.preventDefault();
+      this.typeNumbers(null, key);
+    } else if (isOperator.test(key)) {
+      e.preventDefault();
+      this.performOp(key);
+    } else if (key === ".") {
+      e.preventDefault();
+      this.handleDot();
+    } else if (key === "Backspace") {
+      e.preventDefault();
+      this.clearVal();
+    } else if (key === "Delete") {
+      e.preventDefault();
+      this.clearVal();
+    }
+    if (key === "Enter") {
+      key = "=";
+      e.preventDefault();
+      this.handleEquals();
+      console.log(key);
+    }
+  };
+
+  performOp = nextOperator => {
+    if (this.state.evaluated) {
+      this.setState({
+        formula: this.state.lastResult + nextOperator,
+        curVal: nextOperator,
+        evaluated: false
+      });
+      console.log("performop here? nextOperator");
+    } else {
+      if (endsWithOperator.test(this.state.formula)) {
+        this.setState({
+          curVal: nextOperator,
+          formula: this.state.formula.slice(0, -1) + nextOperator
+        });
+      } else {
+        this.setState({
+          curVal: nextOperator,
+          formula: this.state.formula + nextOperator
+        });
+      }
+    }
+  };
+
+  handleEquals = () => {
+    let form = this.state.formula;
+    if (endsWithOperator.test(form)) {
+      form = form.slice(0, -1);
+    }
+    form = form.replace(/x/g, "*").replace(/‑/g, "-");
+    let calcTotal = Math.round(100000000 * eval(form)) / 100000000;
+    this.setState({
+      curVal: calcTotal.toString(),
+      formula: form.replace(/\*/g, "⋅").replace(/-/g, "‑") + "=" + calcTotal,
+      lastResult: calcTotal,
+      evaluated: true
+    });
+    
+  };
+
+  handleDot = () => {
+    if (this.state.curVal === 0 && this.state.evaluated) {
+      this.setState({
+        curVal: "0.",
+        formula: "0.",
+        evaluated: false
+      });
+    } else if (isOperator.test(this.state.curVal)) {
+      this.setState({
+        curVal: "0.",
+        formula: this.state.formula + "0."
+      });
+    } else if (!hasDecimal.test(this.state.curVal)) {
+      this.setState({
+        curVal: this.state.curVal + ".",
+        formula: this.state.formula + "."
+      });
+    }
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <div className="calc-container">
+          <div className="header-wrapper">
+            {" "}
+            <div className="calc-name">Reactsio</div>
+            <div className="solar">
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
+          </div>
+
+          <div className="display-wrapper">
+            <div className="formula">
+              {String(this.state.formula).substring(0, 21)}
+            </div>
+            <div id="display" className="display">
+              {String(this.state.curVal).substring(0, 15)}
+            </div>
+          </div>
+          <Buttons
+            clearVal={this.clearVal}
+            typeNumbers={this.typeNumbers}
+            performOp={this.performOp}
+            handleEquals={this.handleEquals}
+            handleDot={this.handleDot}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+ReactDOM.render(<App />, document.getElementById("root"));

@@ -1,0 +1,178 @@
+/*SCSS variables*/
+$bg-color: #a30000;
+$display-color: #94d6ee;
+$display-txt: black;
+$bg-cal:linear-gradient(90deg, rgba(163,194,231,1) 29%, rgba(134,184,212,1) 74%);
+$bt-txt:#60b4da;
+
+
+/*Font Family*/
+@font-face {
+  font-family: "Digital";
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot");
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff") format("woff"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.svg#Digital-7") format("svg");
+}
+
+/*Mixing into a private inner class*/
+@mixin inners($color) {
+  box-shadow: inset -1px -2px 4px darken($color, 15),
+    inset 1px 2px 4px lighten($color, 25);
+}
+@mixin gradientleft($color) {
+  background: linear-gradient(
+    162deg,
+    lighten($color, 12) 20%,
+    $color 68%,
+    $color 100%
+  );
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+* {
+  box-sizing: border-box;
+}
+
+/*style the App*/
+.App {
+  text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("https://img.freepik.com/free-vector/mathematical-geometric-background-vector-gradient-blue-education-remix_53876-114100.jpg?size=626&ext=jpg&ga=GA1.1.1700460183.1708732800&semt=ais");
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:cover;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+/*Calculator container*/
+.calc-container {
+  width: 450px;
+  height: 550px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 1rem;
+  border-top-left-radius: 3rem;
+  border-top-right-radius:3rem;
+  border-bottom-left-radius: 4rem;
+  border-bottom-right-radius: 4rem;
+  box-shadow: 10px 10px 5px #a3c2e7;
+  background: $bg-cal;
+/*Header*/
+   .header-wrapper {
+    display: flex;
+    align-items: center;
+     margin: 0.7rem 0.7rem 0.2rem 0;
+         .calc-name {
+      text-transform: uppercase;
+      padding-left: 0.7rem;
+      font-family: "Rajdhani", sans-serif;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .solar {
+      background: $display-color;
+      width: 60px;
+      height: 30px;
+      margin-left: auto;
+      box-shadow: inset 0 -3px 5px #505858, inset 0 2px 15px #000000;
+      display: flex;
+      border-radius: 5px;
+
+      .span {
+        margin-left: auto;
+        width: 1.7px;
+        height: inherit;
+       background: linear-gradient(90deg, rgba(0,0,0,1) 29%, rgba(80,88,88,1) 55%);
+      }
+    }
+  }
+  
+  /*Display*/
+.display-wrapper {
+   background: $display-color;
+    color:$display-txt;
+    padding: 0.5rem 1rem;
+    border-radius: 9px;
+    margin: 0.7rem 0;
+    text-align: right;
+   font-family: "Orbitron", sans-serif;
+    font-family: "Digital";
+    font-size: 1.7rem;
+    overflow: hidden;
+    font-weight: bold;
+    height: 66.8px;
+  border-style:inset;
+    .display {
+      opacity: 0.8;
+    }
+    .formula {
+      font-size: 2rem;
+      opacity: 0.5;
+      height: 26.4px;
+    }
+  }
+  h3 {
+    margin: 0.7rem 0;
+  }
+}
+
+/*Buttons*/
+.buttons-wrapper {
+  padding-top: 1rem;
+  display: grid;
+  grid-template-areas:
+    "ac ac divide multiply"
+    "seven eight nine minus"
+    "four five six plus"
+    "one two three equals"
+    "zero zero decimal equals";
+  grid-gap: 6px;
+  
+  .buttons {
+    border-radius: 30px;
+    padding: 0.9rem 1rem;
+    border-style: outset;
+    background: black;
+    color:$bt-txt;
+    font-size: 1.4rem;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      transform: scale(0.99);
+       background: blue;
+      color: white;
+    }
+  }
+
+  grid-template-columns: repeat(4, 1fr);
+  #clear {
+    grid-area: ac;
+    background: linear-gradient(90deg, rgba(57,184,228,1) 29%, rgba(14,71,103,1) 74%);
+    color:black;
+   font-size:2rem;
+  }
+  #equals {
+    grid-area: equals;
+    background:  linear-gradient(90deg, rgba(162,202,217,1) 29%, rgba(122,159,176,1) 74%);
+    color:black;
+    font-size:2rem;
+  }
+  #zero {
+    grid-area: zero;
+    
+  }
+  .digit {
+    @include gradientleft(#1f1d1f);
+    @include inners(#1f1d1f);
+  }
+}
